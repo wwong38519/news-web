@@ -2,7 +2,6 @@ var app = angular.module('news-web-app', []);
 
 app.controller('main-controller', ['$scope', function($scope) {
 	$scope.test = 'Hello World';
-	$scope.posts_title = ['Post 1', 'Post 2', 'Post 3', 'Post 4', 'Post 5'];
 	$scope.posts = [
 		{title: 'Post 1', upvotes: 5},
 		{title: 'Post 2', upvotes: 57},
@@ -11,7 +10,17 @@ app.controller('main-controller', ['$scope', function($scope) {
 		{title: 'Post 5', upvotes: 29}
 	];
 	$scope.addPost = function() {
-		$scope.posts.push({title: 'A new post', upvoes: 0});
+		if (!$scope.title || $scope.title === '') { return; }
+		$scope.posts.push({
+			title: $scope.title,
+			link: $scope.link,
+			upvotes: 0
+		});
+		$scope.title = '';
+		$scope.link = '';
+	};
+	$scope.incrementUpvotes = function(post) {
+		post.upvotes += 1;
 	};
 }]);
 
