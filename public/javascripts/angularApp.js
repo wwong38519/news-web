@@ -29,7 +29,7 @@ app.factory('posts', [function() {
 }]);
 
 app.controller('main-controller', ['$scope', 'posts', function($scope, posts) {
-	$scope.test = 'Hello World';
+	$scope.title = 'Hello World';
 	$scope.posts = posts.posts;
 	$scope.addPost = function() {
 		if (!$scope.title || $scope.title === '') { return; }
