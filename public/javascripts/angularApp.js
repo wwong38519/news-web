@@ -1,11 +1,18 @@
 var app = angular.module('news-web-app', ['ui.router']);
 
 app.config(['$stateProvider', '$urlRouterProvider', function($stateProvider, $urlRouterProvider) {
-	$stateProvider.state('home', {
+	$stateProvider
+	.state('home', {
 		url: '/home',
 		templateUrl: '/home.html',
 		controller: 'main-controller'
+	})
+	.state('posts', {
+		url: '/posts/{id}',
+		templateUrl: '/posts.html',
+		controller: 'posts-controller'
 	});
+	$urlRouterProvider.otherwise('home');
 }]);
 
 app.factory('posts', [function() {
@@ -29,7 +36,11 @@ app.controller('main-controller', ['$scope', 'posts', function($scope, posts) {
 		$scope.posts.push({
 			title: $scope.title,
 			link: $scope.link,
-			upvotes: 0
+			upvotes: 0,
+			comments: [
+				{author: 'Joe', body: 'Cool post!', upvotes: 0},
+				{author: 'Bob', body: 'Great idea!', upvotes: 0},
+			]
 		});
 		$scope.title = '';
 		$scope.link = '';
@@ -37,5 +48,9 @@ app.controller('main-controller', ['$scope', 'posts', function($scope, posts) {
 	$scope.incrementUpvotes = function(post) {
 		post.upvotes += 1;
 	};
+}]);
+
+app.controller('posts-controller', ['$scope', '$stateParams', 'posts', function($scope, $stateParams, posts) {
+	$scope.post = posts.posts[$stateParams.id];
 }]);
 
