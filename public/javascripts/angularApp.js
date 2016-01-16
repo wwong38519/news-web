@@ -29,7 +29,7 @@ app.factory('posts', [function() {
 }]);
 
 app.controller('main-controller', ['$scope', 'posts', function($scope, posts) {
-	$scope.title = 'Hello World';
+	$scope.site_title = 'Hello World';
 	$scope.posts = posts.posts;
 	$scope.addPost = function() {
 		if (!$scope.title || $scope.title === '') { return; }
@@ -52,5 +52,14 @@ app.controller('main-controller', ['$scope', 'posts', function($scope, posts) {
 
 app.controller('posts-controller', ['$scope', '$stateParams', 'posts', function($scope, $stateParams, posts) {
 	$scope.post = posts.posts[$stateParams.id];
+	$scope.addComment = function() {
+		if ($scope.body === '') { return; }
+		$scope.post.comments.push({
+			body: $scope.body,
+			author: 'user',
+			upvotes: 0
+		});
+		$scope.body = '';
+	};
 }]);
 
