@@ -1,4 +1,12 @@
-var app = angular.module('news-web-app', []);
+var app = angular.module('news-web-app', ['ui.router']);
+
+app.config(['$stateProvider', '$urlRouterProvider', function($stateProvider, $urlRouterProvider) {
+	$stateProvider.state('home', {
+		url: '/home',
+		templateUrl: '/home.html',
+		controller: 'main-controller'
+	});
+}]);
 
 app.factory('posts', [function() {
 	var o = {
