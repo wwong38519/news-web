@@ -39,8 +39,12 @@ router.param('post', function(req, res, next, id) {
 	});
 });
 
-router.get('/posts/:post', function(req, res) {
-	res.json(req.post);
+// GET post by post id and populate comments for the post
+router.get('/posts/:post', function(req, res, next) {
+	req.post.populate('comments', function(err, post) {
+		if (err) return next(err);
+		res.json(req.post);
+	});
 });
 
 // PUT upvote - model.save in schema
@@ -63,6 +67,10 @@ router.post('/posts/:post/comments', function(req, res, next) {
 			res.json(comment);
 		});
 	});
+});
+
+// TODO
+router.put('/posts/:post/comments/:comment/upvote', function(req, res, next) {
 });
 
 module.exports = router;
