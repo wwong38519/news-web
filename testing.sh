@@ -9,3 +9,6 @@ curl http://localhost:3000/posts
 curl http://localhost:3000/posts/569ba45d90614ecb4cf50b83
 #{"_id":"569ba45d90614ecb4cf50b83","title":"test","link":"http://www.google.com","__v":0,"comments":[],"upvotes":0}
 
+curl -X PUT http://localhost:3000/posts/569ba45d90614ecb4cf50b83/upvote
+#{"_id":"569ba45d90614ecb4cf50b83","title":"test","link":"http://www.google.com","__v":0,"comments":[],"upvotes":1}
+
