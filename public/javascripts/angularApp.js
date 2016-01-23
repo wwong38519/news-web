@@ -15,7 +15,14 @@ app.config(['$stateProvider', '$urlRouterProvider', function($stateProvider, $ur
 	.state('posts', {
 		url: '/posts/{id}',
 		templateUrl: '/posts.html',
-		controller: 'posts-controller'
+		controller: 'posts-controller',
+		resolve: {
+			/* if function, then it is injected and the return value is treated as the dependency. If the result is a promise, it is resolved before the controller is instantiated and its value is injected into the controller */
+			/* promise is returned here so that 'post' is injected into controller and retrieving post does not go through service 'posts' */
+			post: ['$stateParams', 'posts', function($stateParams, posts) {
+				return posts.get($stateParams.id);
+			}]
+		}
 	});
 	$urlRouterProvider.otherwise('home');
 }]);
@@ -39,6 +46,11 @@ app.factory('posts', ['$http', function($http) {
 			post.upvotes += 1;
 		});
 	};
+	o.get = function(id) {	// return a promise
+		return $http.get('/posts/'+id).then(function(res) {
+			return res.data;
+		});
+	};
 	return o;
 }]);
 
@@ -59,8 +71,8 @@ app.controller('main-controller', ['$scope', 'posts', function($scope, posts) {
 	};
 }]);
 
-app.controller('posts-controller', ['$scope', '$stateParams', 'posts', function($scope, $stateParams, posts) {
-	$scope.post = posts.posts[$stateParams.id];
+app.controller('posts-controller', ['$scope', 'posts', 'post', function($scope, posts, post) {
+	$scope.post = post;
 	$scope.addComment = function() {
 		if ($scope.body === '') { return; }
 		$scope.post.comments.push({
